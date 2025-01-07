@@ -1,0 +1,72 @@
+import "./style.css";
+
+//======================= Version 1 av demokoden ====================================================
+const getPlanet = async (id: number) => {
+  // skicka en url https://swapi.py4e.com/api/planets/1/
+  // visa upp en del av svaret med console.log
+  const response = await fetch(`https://swapi.py4e.com/api/planets/${id}/`);
+  const data = await response.json();
+  return data;
+};
+const planet = await getPlanet(1);
+console.log(planet.name);
+
+// öva = skriv en getPerson, getFilm, getStarship, getVehicle osv
+/*
+//=========================== Version 2 utan typning ================================================
+const getPerson = async () => {
+  const response = await fetch(`https://swapi.py4e.com/api/people/`);
+  const data = await response.json();
+  return data.results;
+};
+const persons = await getPerson();
+console.log(persons);
+const ulPersons = document.getElementById("persons") as HTMLDivElement;
+
+persons.forEach(async (person) => {
+  const homeworld = person.homeworld; //homeworld: "https://swapi.py4e.com/api/planets/1/"
+  const split = homeworld.split("/");
+  const id = split[split.length - 2];
+  const planet = await getPlanet(id);
+  const p = document.createElement("p");
+  p.innerHTML = `Name: ${person.name}, Eye color: ${person.eye_color}, Home planet: ${planet.name}`;
+  ulPersons.appendChild(p);
+});*/
+//=========================== Version 3 med typning ================================================
+type SWPerson = {
+  name: string;
+  height: string;
+  mass: string;
+  hair_color: string;
+  skin_color: string;
+  eye_color: string;
+  birth_year: string;
+  gender: string;
+  homeworld: string;
+  films: string[];
+  species: string[];
+  vehicles: string[];
+  starships: string[];
+  created: string;
+  edited: string;
+  url: string;
+};
+// === DOM-koden
+const getPerson = async (): Promise<SWPerson[]> => {
+  const response = await fetch(`https://swapi.py4e.com/api/people/`);
+  const data = await response.json();
+  return data.results as SWPerson[];
+};
+const persons: SWPerson[] = await getPerson();
+//console.log(persons);
+const ulPersons = document.getElementById("persons") as HTMLDivElement;
+
+persons.forEach(async (person: SWPerson) => {
+  const homeworld = person.homeworld; //homeworld: "https://swapi.py4e.com/api/planets/1/"
+  const split: string[] = homeworld.split("/");
+  const id: number = Number(split[split.length - 2]);
+  const planet = await getPlanet(id);
+  const p = document.createElement("p");
+  p.innerHTML = `Name: ${person.name}, Eye color: ${person.eye_color}, Home planet: ${planet.name}`;
+  ulPersons.appendChild(p);
+});

@@ -1,5 +1,6 @@
 import "./style.css";
-
+import "./people";
+import "./type";
 //======================= Version 1 av demokoden ====================================================
 const getPlanet = async (id: number) => {
   // skicka en url https://swapi.py4e.com/api/planets/1/
@@ -21,6 +22,7 @@ const getPerson = async () => {
 };
 const persons = await getPerson();
 console.log(persons);
+
 const ulPersons = document.getElementById("persons") as HTMLDivElement;
 
 persons.forEach(async (person) => {
@@ -33,24 +35,7 @@ persons.forEach(async (person) => {
   ulPersons.appendChild(p);
 });*/
 //=========================== Version 3 med typning ================================================
-type SWPerson = {
-  name: string;
-  height: string;
-  mass: string;
-  hair_color: string;
-  skin_color: string;
-  eye_color: string;
-  birth_year: string;
-  gender: string;
-  homeworld: string;
-  films: string[];
-  species: string[];
-  vehicles: string[];
-  starships: string[];
-  created: string;
-  edited: string;
-  url: string;
-};
+
 // === DOM-koden
 const getPerson = async (): Promise<SWPerson[]> => {
   const response = await fetch(`https://swapi.py4e.com/api/people/`);
